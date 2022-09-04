@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1048728444556",
+    "firebase_url": "https://sukhilocationandroidapp-default-rtdb.firebaseio.com",
+    "project_id": "sukhilocationandroidapp",
+    "storage_bucket": "sukhilocationandroidapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1048728444556:android:9de615e910c458e935e5a9",
+        "android_client_info": {
+          "package_name": "com.example.sukhilocationbasedapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1048728444556-2isgckfec8cqg0m5jblr72m912649gvo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sukhilocationbasedapp",
+            "certificate_hash": "309bc07aea5fffbbbf69c8b8435d380078ec8eba"
+          }
+        },
+        {
+          "client_id": "1048728444556-rgpdfi36fdfjnohlickcmv0sk6nb9gho.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAd9OoqmYmXNj7Tx6MBeOb8qa7VLxbwQ5o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1048728444556-rgpdfi36fdfjnohlickcmv0sk6nb9gho.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
