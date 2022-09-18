@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">SukhiLocationBasedApp</string>
+    <string name="app_name">SukhiRide</string>
+    <string name="title_activity_main_screen">MainScreen</string>
 </resources>

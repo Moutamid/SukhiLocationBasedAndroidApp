@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.sukhilocationbasedapp.AccountLoginScreen;
+import com.example.sukhilocationbasedapp.ModuleScreen;
 import com.example.sukhilocationbasedapp.R;
 
 public class WalkthroughScreens extends AppCompatActivity {
@@ -39,7 +40,7 @@ public class WalkthroughScreens extends AppCompatActivity {
         });
         if(isOpenAlread())
         {
-            Intent intent=new Intent(WalkthroughScreens.this, AccountLoginScreen.class);
+            Intent intent=new Intent(WalkthroughScreens.this, ModuleScreen.class);
             startActivity(intent);
         }
         else

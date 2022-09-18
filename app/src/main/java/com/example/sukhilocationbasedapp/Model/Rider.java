@@ -1,4 +1,4 @@
-package com.example.ridersukhilocationbasedapp.Model;
+package com.example.sukhilocationbasedapp.Model;
 
 public class Rider {
 

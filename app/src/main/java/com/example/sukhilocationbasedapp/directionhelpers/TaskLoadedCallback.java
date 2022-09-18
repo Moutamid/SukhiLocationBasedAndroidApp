@@ -1,4 +1,4 @@
-package com.thecodecity.mapsdirection.directionhelpers;
+package com.example.sukhilocationbasedapp.directionhelpers;
 
 /**
  * Created by Vishal on 10/20/2018.

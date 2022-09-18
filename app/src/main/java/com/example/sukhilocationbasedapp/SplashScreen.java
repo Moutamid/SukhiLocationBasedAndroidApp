@@ -20,7 +20,7 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
 
-                startActivity(new Intent(getApplicationContext(), WalkthroughScreens.class));
+                startActivity(new Intent(getApplicationContext(), WelcomeScreen.class));
                 finish();
             }
         },SSPLASH_TIME);

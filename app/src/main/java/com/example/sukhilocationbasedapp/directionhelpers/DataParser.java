@@ -1,4 +1,4 @@
-package com.thecodecity.mapsdirection.directionhelpers;
+package com.example.sukhilocationbasedapp.directionhelpers;
 
 import com.google.android.gms.maps.model.LatLng;
 

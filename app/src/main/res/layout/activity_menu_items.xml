@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MenuItemsActivity"
+    tools:context=".customer.MenuItemsActivity"
     android:background="@drawable/ride_back">
 
 
@@ -144,6 +144,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:text="Settings"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp" />
+                        <TextView
+                            android:id="@+id/logout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Logout"
                             android:textColor="@android:color/white"
                             android:textSize="18sp" />
 

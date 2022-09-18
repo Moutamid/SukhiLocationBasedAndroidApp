@@ -2,6 +2,7 @@ package com.example.sukhilocationbasedapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sukhilocationbasedapp.Model.User;
+import com.example.sukhilocationbasedapp.customer.MainScreen;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -23,11 +26,15 @@ import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -40,17 +47,17 @@ public class VerficationCode extends AppCompatActivity {
     private String verificationId;
 
     private FirebaseAuth mFirebaseAuth;
-    private DatabaseReference mFirebaseDatabase;
+    private DatabaseReference userdb,driverdb;
     private PhoneAuthProvider.ForceResendingToken resendToken;
     private EditText mEtCode;
-    private Button mBtNext;
+    private AppCompatButton mBtNext;
     private TextView  mTvResend, mTvTime,numberTxt;
-    private TextView mToolbarTitle;
     String code;
     ProgressDialog dialog;
-    private String userId;
     private CountDownTimer timer;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallback;
+    private String utype = "";
+    private SharedPreferencesManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +70,14 @@ public class VerficationCode extends AppCompatActivity {
         numberTxt = findViewById(R.id.number);
         phoneNumber = getIntent().getStringExtra("phone");
         dialog = new ProgressDialog(VerficationCode.this);
-        numberTxt.setText(phoneNumber);
+        numberTxt.setText("+92"+phoneNumber);
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance().getReference("Customer")
-                .child(mFirebaseAuth.getCurrentUser().getUid());
+        manager = new SharedPreferencesManager(this);
+        utype = manager.retrieveString("utype","");
+        userdb = FirebaseDatabase.getInstance().getReference("Users");
+        driverdb = FirebaseDatabase.getInstance().getReference("Drivers");
         sendVerificationCode(phoneNumber);
-
+        resetTimer();
         mBtNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,7 +140,7 @@ public class VerficationCode extends AppCompatActivity {
         setUpVerificationCallbacks();
         resetTimer();
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mFirebaseAuth)
-                .setPhoneNumber(phone)
+                .setPhoneNumber("+92" +phone)
                 .setTimeout(60L, TimeUnit.SECONDS)
                 .setForceResendingToken(resendToken)
                 .setActivity(this).setCallbacks(mCallback).build();
@@ -142,7 +151,7 @@ public class VerficationCode extends AppCompatActivity {
     }
 
     private void resetTimer() {
-        timer = new CountDownTimer(30000, 1000) {
+        new CountDownTimer(30000, 1000) {
             public void onTick(long millisUntilFinished) {
                 // Used for formatting digit to be in 2 digits only
                 NumberFormat f = new DecimalFormat("00");
@@ -151,23 +160,32 @@ public class VerficationCode extends AppCompatActivity {
             }
             // When the task is over it will print 00:00:00 there
             public void onFinish() {
-                mTvTime.setText("02:00");
-                timer.cancel();
-                disableButton();
+                mTvTime.setText("0:30");
+                mTvResend.setEnabled(true);
+                //timer.cancel();
+                //disableButton();
             }
         }.start();
     }
 
-    private void disableButton() {
+   /* private void disableButton() {
 
         mTvResend.setEnabled(false);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mTvResend.setEnabled(true);
+        new CountDownTimer(30000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                mTvTime.setText("seconds remaining: " + millisUntilFinished / 1000);
+                //here you can have your logic to set text to edittext
             }
-        },60000*2);
-    }
+
+            public void onFinish() {
+                mTvResend.setEnabled(true);
+                mTvResend.setText("0:30");
+            }
+
+        }.start();
+
+    }*/
 
 
     private void verifyCode(String code) {
@@ -188,27 +206,89 @@ public class VerficationCode extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            HashMap<String,Object> hashMap = new HashMap<>();
-                            hashMap.put("phone",phoneNumber);
-                            mFirebaseDatabase.updateChildren(hashMap);
+                            FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
+                            if (utype.equals("user")){
+                                checkUserExists();
+                            }else {
+                                checkDriverExists();
+                            }
                             dialog.dismiss();
-
-                            Intent intent = new Intent(VerficationCode.this, MainScreen.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
                         } else {
+                            dialog.dismiss();
                             Toast.makeText(VerficationCode.this, "Cannot verify : " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
+    private void checkDriverExists() {
+        driverdb.child(mFirebaseAuth.getCurrentUser().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            sendDriverToMainScreen();
+                        }else {
+                            Intent intent = new Intent(VerficationCode.this, ProfileActivity.class);
+                            intent.putExtra("phone","+92"+phoneNumber);
+                            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+    private void checkUserExists() {
+        userdb.child(mFirebaseAuth.getCurrentUser().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            sendUserToMainScreen();
+                        }else {
+                            Intent intent = new Intent(VerficationCode.this, ProfileActivity.class);
+                            intent.putExtra("phone","+92"+phoneNumber);
+                            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    private void sendDriverToMainScreen() {
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        if (user != null) {
+            Intent intent = new Intent(VerficationCode.this, com.example.sukhilocationbasedapp.driver.MainScreen.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private void sendUserToMainScreen() {
+        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+        if (user != null) {
+            Intent intent = new Intent(VerficationCode.this, MainScreen.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }
+    }
 
     private void sendVerificationCode(String number) {
         setUpVerificationCallbacks();
 
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mFirebaseAuth)
-                .setPhoneNumber(number)
+                .setPhoneNumber("+92" + number)
                 .setTimeout(60L,TimeUnit.SECONDS)
                 .setActivity(this).setCallbacks(mCallback).build();
 

@@ -3,6 +3,7 @@ package com.example.sukhilocationbasedapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,8 +13,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sukhilocationbasedapp.Model.Rider;
+import com.example.sukhilocationbasedapp.Model.User;
+import com.example.sukhilocationbasedapp.customer.MainScreen;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -27,11 +32,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.w3c.dom.Text;
 
 public class AccountLoginScreen extends AppCompatActivity {
 
     private EditText phoneTxt;
-    private Button nextBtn;
+    private AppCompatButton nextBtn;
     private ImageView googleBtn;
     private ImageView facebookBtn;
     private static final int RC_SIGN_IN = 234;
@@ -39,7 +48,10 @@ public class AccountLoginScreen extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseUser currrentUser;
     ProgressDialog dialog;
-
+    private TextView loginBtn;
+    private DatabaseReference userdb,driverdb;
+    private String utype = "";
+    private SharedPreferencesManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +61,13 @@ public class AccountLoginScreen extends AppCompatActivity {
         nextBtn = findViewById(R.id.next);
         googleBtn = findViewById(R.id.google);
         facebookBtn = findViewById(R.id.facebook);
-
+        loginBtn = findViewById(R.id.login);
         mAuth = FirebaseAuth.getInstance();
         currrentUser = mAuth.getCurrentUser();
+        manager = new SharedPreferencesManager(this);
+        utype = manager.retrieveString("utype","");
+        userdb = FirebaseDatabase.getInstance().getReference("Users");
+        driverdb = FirebaseDatabase.getInstance().getReference("Drivers");
         dialog = new ProgressDialog(AccountLoginScreen.this);
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,8 +87,6 @@ public class AccountLoginScreen extends AppCompatActivity {
                 .requestEmail()
                 .build();
 
-
-
         mGoogleSignInClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
@@ -91,7 +105,6 @@ public class AccountLoginScreen extends AppCompatActivity {
         facebookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
             }
         });
     }
@@ -130,7 +143,17 @@ public class AccountLoginScreen extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                    sendUserToMainScreen();
+                    if (utype.equals("user")){
+                        User user = new User(firebaseUser.getUid(),"",account.getDisplayName(),account.getEmail(),
+                                "","",account.getPhotoUrl().toString());
+                        userdb.child(firebaseUser.getUid()).setValue(user);
+                        sendUserToMainScreen();
+                    }else {
+                        Rider user = new Rider(firebaseUser.getUid(),account.getDisplayName(),account.getEmail(),
+                                "","",account.getPhotoUrl().toString());
+                        driverdb.child(firebaseUser.getUid()).setValue(user);
+                        sendDriverToMainScreen();
+                    }
                     dialog.dismiss();
                     // Toast.makeText(Login.this, "User Signed In", Toast.LENGTH_SHORT).show();
                 } else {
@@ -146,20 +169,29 @@ public class AccountLoginScreen extends AppCompatActivity {
 
     }
 
+    private void sendDriverToMainScreen() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            Intent intent = new Intent(AccountLoginScreen.this, com.example.sukhilocationbasedapp.driver.MainScreen.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }else {
+     //       Toast.makeText(AccountLoginScreen.this,"Login First",Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void sendUserToMainScreen() {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             Intent intent = new Intent(AccountLoginScreen.this, MainScreen.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         }else {
-            Toast.makeText(AccountLoginScreen.this,"Login First",Toast.LENGTH_LONG).show();
+       //     Toast.makeText(AccountLoginScreen.this,"Login First",Toast.LENGTH_LONG).show();
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sendUserToMainScreen();
-    }
+
 }

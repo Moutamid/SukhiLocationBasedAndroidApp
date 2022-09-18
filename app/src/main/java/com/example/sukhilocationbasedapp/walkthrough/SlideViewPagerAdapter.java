@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.example.sukhilocationbasedapp.AccountLoginScreen;
+import com.example.sukhilocationbasedapp.ModuleScreen;
 import com.example.sukhilocationbasedapp.R;
 
 
@@ -51,12 +52,12 @@ public class SlideViewPagerAdapter extends PagerAdapter {
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ctx.startActivity(new Intent(ctx, AccountLoginScreen.class));
+                ctx.startActivity(new Intent(ctx, ModuleScreen.class));
             }
         });
 
         if (position > 2){
-            ctx.startActivity(new Intent(ctx, AccountLoginScreen.class));
+            ctx.startActivity(new Intent(ctx, ModuleScreen.class));
         }
 
         switch (position)

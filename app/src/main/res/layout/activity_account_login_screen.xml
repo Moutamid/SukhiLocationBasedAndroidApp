@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".AccountLoginScreen">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -15,108 +15,115 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <ImageView
+            android:id="@+id/top"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/loginbg"
             android:scaleType="fitXY"
-            android:id="@+id/top"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/top"
-            android:layout_marginTop="-178dp"
-            android:background="@drawable/loginbgs"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="50dp"
-                android:text="SIGN UP"
-                android:textColor="@android:color/white"
-                android:textSize="25sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:gravity="center"
-                android:text="Enter your Phone Number"
-                android:textColor="@android:color/white"
-                android:textSize="22sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="We will send you a 4 digits verification code"
-                android:textColor="@android:color/white"
-                android:textSize="11sp" />
-
-            <EditText
-                android:id="@+id/phone"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:drawableLeft="@drawable/ic_baseline_call_24"
-                android:drawableTint="@android:color/white"
-                android:background="@drawable/divider"
-                android:drawablePadding="8dp"
-                android:hint="phone number"
-                android:padding="8dp"
-                android:textColor="@android:color/white"
-                android:textColorHint="@android:color/white" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="Next"
-                android:layout_gravity="center"
-                android:drawablePadding="5dp"
-                android:id="@+id/next"
-                android:background="@drawable/button_border"
-                android:drawableRight="@drawable/ic_baseline_arrow_right_alt_24"
-                android:textColor="@android:color/black"
-                android:layout_centerInParent="true"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="OR"
-                android:layout_marginTop="10dp"
-                android:textColor="@android:color/white"
-                android:layout_gravity="center"/>
+            android:src="@drawable/loginbg" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/top"
+                android:layout_marginTop="-178dp"
+                android:background="@drawable/loginbgs"
+                android:orientation="vertical">
 
-                <ImageView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/facebook"
-                    android:id="@+id/facebook"/>
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="80dp"
+                    android:text="SIGN UP"
+                    android:textColor="@android:color/white"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
 
-                <ImageView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:gravity="center"
+                    android:text="Enter your Phone Number"
+                    android:textColor="@android:color/white"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="We will send you a 4 digits verification code"
+                    android:textColor="@android:color/white"
+                    android:textSize="11sp" />
+
+                <EditText
+                    android:id="@+id/phone"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/divider"
+                    android:drawableLeft="@drawable/ic_baseline_call_24"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@android:color/white"
+                    android:hint="Ex. 3435655678"
+                    android:inputType="phone"
+                    android:padding="8dp"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/next"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/google"
-                    android:layout_marginLeft="20dp"
-                    android:id="@+id/google"/>
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/button_border"
+                    android:backgroundTint="@color/purple_500"
+                    android:drawableRight="@drawable/ic_baseline_arrow_right_alt_24"
+                    android:drawablePadding="5dp"
+                    android:padding="8dp"
+                    android:text="Next"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:text="OR"
+                    android:textColor="@android:color/white" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/facebook"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/facebook" />
+
+                    <ImageView
+                        android:id="@+id/google"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:src="@drawable/google" />
+
+                </LinearLayout>
 
             </LinearLayout>
-
-        </LinearLayout>
-
-    </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

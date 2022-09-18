@@ -5,28 +5,60 @@
       <map>
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable-v24/background.xml" value="0.1665" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable-v24/dividers.xml" value="0.1665" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable-v24/input.xml" value="0.1565" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable-v24/search_background.xml" value="0.1565" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable-v24/selected_text.xml" value="0.1665" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/background.xml" value="0.1665" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/button_border.xml" value="0.1665" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/button_borders.xml" value="0.169" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/divider.xml" value="0.1665" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/dividers.xml" value="0.1665" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/dotted_border.xml" value="0.1665" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.1665" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/ic_baseline_call_24.xml" value="0.1565" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.1665" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/ic_baseline_email_24.xml" value="0.1565" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/input.xml" value="0.1565" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/search_background.xml" value="0.1565" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/selected.xml" value="0.1665" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/selected_background.xml" value="0.1665" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/selected_dividers.xml" value="0.169" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/selected_text.xml" value="0.1665" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/unselected.xml" value="0.1665" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/unselected_text.xml" value="0.1665" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/drawable/white_ background.xml" value="0.1665" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_account_login_screen.xml" value="0.20416666666666666" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_available_requests.xml" value="0.20416666666666666" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_document_management.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_edit_profile.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_help.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_languages.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_login.xml" value="0.203125" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_main_screen.xml" value="0.20416666666666666" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_main_screens.xml" value="0.12273550724637682" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_menu_items.xml" value="0.20416666666666666" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_module_screen.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_my_trips.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_notification.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_payment.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_privacy_policy_screen.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_profile.xml" value="0.20416666666666666" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_promos_screen.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_rate_trip.xml" value="0.20416666666666666" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_request_ride.xml" value="0.19010416666666666" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_ride_reviews.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_rider_menu_item.xml" value="0.20416666666666666" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_set_destination.xml" value="0.20416666666666666" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_set_your_location.xml" value="0.20416666666666666" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_settings.xml" value="0.12273550724637682" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_show_location_on_map.xml" value="0.20416666666666666" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_trip_details.xml" value="0.203125" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_vehicle_management.xml" value="0.20416666666666666" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_verfication_code.xml" value="0.20416666666666666" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_walkthrough_screens.xml" value="0.19010416666666666" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/activity_welcome_screen.xml" value="0.18" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/custom_layout.xml" value="0.203125" />
+        <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/request_custom_layout.xml" value="0.203125" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/slide_screen.xml" value="0.129981884057971" />
         <entry key="..\:/New folder/Bridgetlinx/SukhiLocationBasedApp/app/src/main/res/layout/splash_screen.xml" value="0.20416666666666666" />
       </map>
