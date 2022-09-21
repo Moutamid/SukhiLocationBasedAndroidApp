@@ -34,7 +34,7 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/driver"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:background="@drawable/button_border"
@@ -57,7 +57,7 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/customer"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:layout_marginTop="20dp"

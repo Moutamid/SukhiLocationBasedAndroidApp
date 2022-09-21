@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.sukhilocationbasedapp.Model.Trip;
@@ -34,6 +35,7 @@ public class AvailableRequestsActivity extends AppCompatActivity {
     private TextView notifyTxt;
     private LinearLayoutManager manager;
     private ImageView menuImg;
+    private LinearLayout dataLayout,noDataLayout;
     private DatabaseReference mRequestTrip;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -49,6 +51,8 @@ public class AvailableRequestsActivity extends AppCompatActivity {
         manager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(manager);
         notifyTxt = findViewById(R.id.count);
+        dataLayout = findViewById(R.id.data_layout);
+        noDataLayout = findViewById(R.id.no_data_layout);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         mRequestTrip = FirebaseDatabase.getInstance().getReference().child("Requests");
@@ -74,6 +78,8 @@ public class AvailableRequestsActivity extends AppCompatActivity {
                         Trip model = ds.getValue(Trip.class);
                         tripList.add(model);
                     }
+                    noDataLayout.setVisibility(View.GONE);
+                    dataLayout.setVisibility(View.VISIBLE);
                     notifyTxt.setVisibility(View.VISIBLE);
                     notifyTxt.setText("You have " + snapshot.getChildrenCount() + " new requests.");
                     RideRequestListAdapter adapter = new RideRequestListAdapter(AvailableRequestsActivity.this,
@@ -88,6 +94,10 @@ public class AvailableRequestsActivity extends AppCompatActivity {
                         }
                     });
                     adapter.notifyDataSetChanged();
+                }
+                else {
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    dataLayout.setVisibility(View.GONE);
                 }
             }
 

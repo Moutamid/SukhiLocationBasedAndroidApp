@@ -1,6 +1,7 @@
 package com.example.sukhilocationbasedapp.customer;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
@@ -12,10 +13,12 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -46,6 +49,7 @@ import org.json.JSONObject;
 import java.sql.Driver;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -72,10 +76,13 @@ public class RequestRide extends AppCompatActivity {
     private ProgressDialog pd;
     private double driverLat = 0;
     private double driverLng = 0;
+    private double custLat = 0;
+    private double custLng = 0;
     private double desLat = 0;
     private double desLng = 0;
     private RequestQueue requestQueue;
     private String key = "";
+    private int distance = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,12 +142,16 @@ public class RequestRide extends AppCompatActivity {
         mRequestTrip = FirebaseDatabase.getInstance().getReference().child("Requests");
         pickup_location.setText(sourceLocation);
         drop_location.setText(destinationLocation);
+        //getCustomerLatLng();
+        //getDriverLatLng();
         arms_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 disability = "arms";
                 time = timeTxt1.getText().toString();
                 price = priceTxt1.getText().toString();
+                int randomTime = new Random().nextInt(10);
+                showAlertDialogBox(randomTime);
                 arms_layout.setBackgroundResource(R.drawable.selected_dividers);
                 backbone_layout.setBackgroundResource(R.drawable.dividers);
                 mental_layout.setBackgroundResource(R.drawable.dividers);
@@ -153,6 +164,8 @@ public class RequestRide extends AppCompatActivity {
                 disability = "backbone";
                 time = timeTxt2.getText().toString();
                 price = priceTxt2.getText().toString();
+                int randomTime = new Random().nextInt(10);
+                showAlertDialogBox(randomTime);
                 arms_layout.setBackgroundResource(R.drawable.dividers);
                 backbone_layout.setBackgroundResource(R.drawable.selected_dividers);
                 mental_layout.setBackgroundResource(R.drawable.dividers);
@@ -165,6 +178,8 @@ public class RequestRide extends AppCompatActivity {
                 disability = "mental";
                 time = timeTxt3.getText().toString();
                 price = priceTxt3.getText().toString();
+                int randomTime = new Random().nextInt(10);
+                showAlertDialogBox(randomTime);
                 arms_layout.setBackgroundResource(R.drawable.dividers);
                 backbone_layout.setBackgroundResource(R.drawable.dividers);
                 mental_layout.setBackgroundResource(R.drawable.selected_dividers);
@@ -177,6 +192,8 @@ public class RequestRide extends AppCompatActivity {
                 disability = "legs";
                 time = timeTxt4.getText().toString();
                 price = priceTxt4.getText().toString();
+                int randomTime = new Random().nextInt(10);
+                showAlertDialogBox(randomTime);
                 arms_layout.setBackgroundResource(R.drawable.dividers);
                 backbone_layout.setBackgroundResource(R.drawable.dividers);
                 mental_layout.setBackgroundResource(R.drawable.dividers);
@@ -285,12 +302,11 @@ public class RequestRide extends AppCompatActivity {
                 String key = mRequestTrip.push().getKey();
                 if (!cash.equals("")){
                     Trip model = new Trip(key,user.getUid(),sourceLocation,destinationLocation,price,time,
-                            "",cash,"pending");
+                            "",cash,"pending",distance);
                     mRequestTrip.child(key).setValue(model);
                     pd.setMessage("Searching For Driver......");
                     pd.show();
                     searchingForDriver();
-
                 }
             }
         });
@@ -310,6 +326,25 @@ public class RequestRide extends AppCompatActivity {
         });
 
     }
+
+    private void showAlertDialogBox(int time) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(RequestRide.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View add_view = inflater.inflate(R.layout.disability_alert_dialog,null);
+        ImageView closeImg = add_view.findViewById(R.id.close);
+        TextView textView = add_view.findViewById(R.id.timeTxt);
+        builder.setView(add_view);
+        textView.setText("Your driver can be arrived in " + time + " minutes.");
+        AlertDialog alertDialog = builder.create();
+        closeImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
+
 
     private void getLatLng(String destinationLocation) {
         String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?input="+destinationLocation+"&key=AIzaSyAywE2WbCBtd5oeitbemZ4Yr3B99efVylU";
@@ -375,7 +410,6 @@ public class RequestRide extends AppCompatActivity {
                             rideBtn.setTextColor(Color.BLACK);
                             titleTxt.setText("Ride Confirmed");
                             getRiderData(model);
-
                         }
                     }
                 }
@@ -388,6 +422,70 @@ public class RequestRide extends AppCompatActivity {
         });
     }
 
+    private void getCustomerLatLng() {
+        DatabaseReference driversOnlineDB = FirebaseDatabase.getInstance().getReference()
+                .child("Customers Available").child(user.getUid());
+        driversOnlineDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    custLat = (double) snapshot.child("l").child("0").getValue();
+                    custLng = (double) snapshot.child("l").child("1").getValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void getDriverLatLng() {
+        DatabaseReference driversOnlineDB = FirebaseDatabase.getInstance().getReference()
+                .child("Drivers Available");
+        driversOnlineDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for (DataSnapshot ds: snapshot.getChildren()){
+                        double lat = (double) ds.child("l").child("0").getValue();
+                        double lng = (double) ds.child("l").child("1").getValue();
+
+                        if(custLat != 0 && custLng != 0){
+                            calculateDistance(custLat,custLng,lat,lng);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void calculateDistance(double custLat, double custLng, double lat, double lng) {
+        double theta = custLng - lng;
+        double dist = Math.sin(deg2rad(custLat))
+                * Math.sin(deg2rad(lat))
+                + Math.cos(deg2rad(custLat))
+                * Math.cos(deg2rad(lat))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        distance = (int) dist;
+        Toast.makeText(RequestRide.this, ""+distance, Toast.LENGTH_SHORT).show();
+    }
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
     private void getRiderLatLng(String riderId) {
         DatabaseReference driversOnlineDB = FirebaseDatabase.getInstance().getReference()
                 .child("Drivers Available").child(riderId);

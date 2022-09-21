@@ -80,7 +80,7 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/next"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_centerInParent="true"
                     android:layout_gravity="center"
                     android:layout_marginTop="15dp"
@@ -109,14 +109,14 @@
 
                     <ImageView
                         android:id="@+id/facebook"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:src="@drawable/facebook" />
 
                     <ImageView
                         android:id="@+id/google"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginLeft="20dp"
                         android:src="@drawable/google" />
 

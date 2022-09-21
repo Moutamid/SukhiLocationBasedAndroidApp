@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.sukhilocationbasedapp.Model.Reviews;
@@ -35,6 +36,7 @@ public class RideReviewsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private List<Reviews> reviewsList;
+    private LinearLayout dataLayout,noDataLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,8 @@ public class RideReviewsActivity extends AppCompatActivity {
         manager = new LinearLayoutManager(RideReviewsActivity.this);
         manager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(manager);
-
+        dataLayout = findViewById(R.id.data_layout);
+        noDataLayout = findViewById(R.id.no_data_layout);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         mReviewsDB = FirebaseDatabase.getInstance().getReference().child("Reviews");
@@ -70,10 +73,15 @@ public class RideReviewsActivity extends AppCompatActivity {
                         Reviews model = ds.getValue(Reviews.class);
                         reviewsList.add(model);
                     }
+                    noDataLayout.setVisibility(View.GONE);
+                    dataLayout.setVisibility(View.VISIBLE);
                     ReviewListAdapter adapter = new ReviewListAdapter(RideReviewsActivity.this,
                             reviewsList);
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+                }else {
+                    noDataLayout.setVisibility(View.VISIBLE);
+                    dataLayout.setVisibility(View.GONE);
                 }
             }
 

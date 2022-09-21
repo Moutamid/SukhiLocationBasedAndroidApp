@@ -3,7 +3,7 @@ package com.example.sukhilocationbasedapp.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Trip implements Parcelable {
+public class Trip implements Parcelable{
 
     private String id;
     private String userId;
@@ -13,6 +13,7 @@ public class Trip implements Parcelable {
     private String time;
     private String riderId;
     private String cashStatus;
+    private int distance;
     private String status;
 
     public Trip(){
@@ -21,7 +22,7 @@ public class Trip implements Parcelable {
 
 
     public Trip(String id, String userId, String pickup, String dropoff, String price, String time,
-                String riderId, String cashStatus,String status) {
+                String riderId, String cashStatus,String status,int distance) {
         this.id = id;
         this.userId = userId;
         this.pickup = pickup;
@@ -31,6 +32,7 @@ public class Trip implements Parcelable {
         this.riderId = riderId;
         this.cashStatus = cashStatus;
         this.status = status;
+        this.distance = distance;
     }
 
     protected Trip(Parcel in) {
@@ -42,6 +44,7 @@ public class Trip implements Parcelable {
         time = in.readString();
         riderId = in.readString();
         cashStatus = in.readString();
+        distance = in.readInt();
         status = in.readString();
     }
 
@@ -56,6 +59,14 @@ public class Trip implements Parcelable {
             return new Trip[size];
         }
     };
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
 
     public String getStatus() {
         return status;
@@ -136,7 +147,6 @@ public class Trip implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-
         parcel.writeString(id);
         parcel.writeString(userId);
         parcel.writeString(pickup);
@@ -145,7 +155,7 @@ public class Trip implements Parcelable {
         parcel.writeString(time);
         parcel.writeString(riderId);
         parcel.writeString(cashStatus);
+        parcel.writeInt(distance);
         parcel.writeString(status);
     }
-
 }

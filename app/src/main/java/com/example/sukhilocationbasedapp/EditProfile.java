@@ -18,6 +18,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.sukhilocationbasedapp.Model.Rider;
@@ -64,6 +65,7 @@ public class EditProfile extends AppCompatActivity {
     private String phoneNumber = "";
     StorageReference mStorage;
     private Bitmap bitmap;
+    private ImageView backImg;
     private static final int STORAGE_PERMISSION_CODE = 101;
    // private SharedPreferencesManager manager;
     private String utype = "";
@@ -78,6 +80,7 @@ public class EditProfile extends AppCompatActivity {
         cpassTxt = findViewById(R.id.cpass);
         profileImg = findViewById(R.id.imageView);
         signUpBtn = findViewById(R.id.signUp);
+        backImg = findViewById(R.id.back);
         mStorage = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -92,6 +95,19 @@ public class EditProfile extends AppCompatActivity {
         }else {
             getDriver();
         }
+
+        backImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(utype.equals("user")){
+                    startActivity(new Intent(EditProfile.this,MainScreen.class));
+                    finish();
+                }else {
+                    startActivity(new Intent(EditProfile.this, com.example.sukhilocationbasedapp.driver.MainScreen.class));
+                    finish();
+                }
+            }
+        });
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

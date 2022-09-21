@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.example.sukhilocationbasedapp.Model.Trip;
 import com.example.sukhilocationbasedapp.R;
@@ -60,7 +61,7 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     private void getRequestList() {
-        Query query = mRequestTrip.orderByChild("status").equalTo("completed");
+        Query query = mRequestTrip.orderByChild("status").equalTo("accepted");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -71,6 +72,8 @@ public class NotificationActivity extends AppCompatActivity {
                             tripList.add(model);
                         }
                     }
+                    b.recyclerView.setVisibility(View.VISIBLE);
+                    b.noDataLayout.setVisibility(View.GONE);
                     RideRequestListAdapter adapter = new RideRequestListAdapter(NotificationActivity.this,
                             tripList);
                     b.recyclerView.setAdapter(adapter);
@@ -83,6 +86,9 @@ public class NotificationActivity extends AppCompatActivity {
                         }
                     });
                     adapter.notifyDataSetChanged();
+                }else {
+                    b.recyclerView.setVisibility(View.GONE);
+                    b.noDataLayout.setVisibility(View.VISIBLE);
                 }
             }
 

@@ -114,6 +114,9 @@ public class SetYourLocation extends AppCompatActivity {
                                         hashMap.put("location",addressList.get(position).getName());
                                         db.updateChildren(hashMap);
                                         Intent intent = new Intent(SetYourLocation.this,MainScreen.class);
+                                      //  intent.putExtra("source",addressList.get(position).getName());
+                                        //intent.putExtra("clat",addressList.get(position).getLat());
+                                        //intent.putExtra("clng",addressList.get(position).getLng());
                                         startActivity(intent);
                                     }
                                 });

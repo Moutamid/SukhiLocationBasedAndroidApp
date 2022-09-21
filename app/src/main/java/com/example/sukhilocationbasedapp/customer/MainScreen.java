@@ -88,11 +88,12 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
     private DatabaseReference db,customerOnlineDB;
     private FirebaseAuth mAuth;
     private String uId;
-    double currentLat, currentLng = 0;
+    private double currentLat, currentLng = 0;
     private double desLat, desLng = 0;
     private double driverLat, driverLng = 0;
-    private String location = "";
+    //private String location = "";
     private String destination = "";
+    private String source = "";
     private String key = "";
     private AppCompatButton nextBtn;
     private static final int REQUEST_LOCATION = 1;
@@ -138,16 +139,20 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
             showGPSDialogBox();
         }
+        checkLocation();
         if (getIntent() != null) {
             key = getIntent().getStringExtra("key");
+            //source = getIntent().getStringExtra("source");
             destination = getIntent().getStringExtra("destination");
+            //currentLat = getIntent().getDoubleExtra("clat", 0);
+            //currentLng = getIntent().getDoubleExtra("clng", 0);
             desLat = getIntent().getDoubleExtra("lat", 0);
             desLng = getIntent().getDoubleExtra("lng", 0);
             driverLat = getIntent().getDoubleExtra("driver_lat", 0);
             driverLng = getIntent().getDoubleExtra("driver_lng", 0);
         }
 
-        Toast.makeText(MainScreen.this, desLat +" , "+ desLng + " , "+ driverLat + " , "+ driverLng, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(MainScreen.this, desLat +" , "+ desLng + " , "+ driverLat + " , "+ driverLng, Toast.LENGTH_SHORT).show();
 
         top_location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,11 +171,12 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainScreen.this,RequestRide.class);
-                intent.putExtra("source",location);
+                intent.putExtra("source",source);
                 intent.putExtra("destination",destination);
                 startActivity(intent);
             }
         });
+
     }
 
     private void showGPSDialogBox() {
@@ -299,7 +305,7 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
     @Override
     public void onLocationChanged(@NonNull Location location) {
 
-        getCompleteAddressString(location.getLatitude(),location.getLongitude());
+        //getCompleteAddressString(location.getLatitude(),location.getLongitude());
 
         currentLat = location.getLatitude();
         currentLng = location.getLongitude();
@@ -354,7 +360,7 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
 
     }
 
-    private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+  /*  private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
         String strAdd = "";
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
@@ -376,7 +382,7 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
             Log.w("My Current", "Canont get Address!");
         }
         return strAdd;
-    }
+    }*/
 
     private void checkLocation() {
      //   Query query = db.orderByChild("location").equalTo(location);
@@ -386,13 +392,13 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
                 if (snapshot.exists()) {
                     User model = snapshot.getValue(User.class);
                     if (model.getLocation().equals("")){
-                        top_location.setText(location);
+                        top_location.setText("Pickup Location");
                     }else {
-                        location = model.getLocation();
-                        top_location.setText(location);
+                        source = model.getLocation();
+                        top_location.setText(source);
                     }
                 } else {
-                    top_location.setText(location);
+                    top_location.setText("Pickup Location");
                 }
             }
 

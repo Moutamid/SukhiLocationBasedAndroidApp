@@ -125,7 +125,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:text="Ignore"
                 android:id="@+id/ignore"
                 android:textAllCaps="false"
@@ -140,7 +140,7 @@
                 android:layout_weight="1"/>
             <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:text="Accept"
                 android:id="@+id/confirm"
                 android:textAllCaps="false"

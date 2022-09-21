@@ -211,7 +211,7 @@
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/continueBtn"
                         android:layout_width="200dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_marginLeft="8dp"
                         android:background="@drawable/button_border"
                         android:backgroundTint="@color/purple_700"
@@ -460,7 +460,7 @@
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:layout_width="200dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:text="Continue"
                         android:id="@+id/continueBtns"
                         android:background="@drawable/button_border"
@@ -579,7 +579,7 @@
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:layout_width="200dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:text="Request a Trip"
                         android:id="@+id/request_trip"
                         android:textAllCaps="false"
@@ -776,7 +776,7 @@
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:layout_width="200dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:text="Request a Trip"
                         android:id="@+id/confirm"
                         android:textAllCaps="false"

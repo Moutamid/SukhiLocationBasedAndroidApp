@@ -69,6 +69,9 @@ public class MyTrips extends AppCompatActivity {
                             tripList.add(model);
                         }
                     }
+
+                    b.recyclerView.setVisibility(View.VISIBLE);
+                    b.noDataLayout.setVisibility(View.GONE);
                     RideRequestListAdapter adapter = new RideRequestListAdapter(MyTrips.this,
                             tripList);
                     b.recyclerView.setAdapter(adapter);
@@ -81,6 +84,10 @@ public class MyTrips extends AppCompatActivity {
                         }
                     });
                     adapter.notifyDataSetChanged();
+                }else {
+
+                    b.recyclerView.setVisibility(View.GONE);
+                    b.noDataLayout.setVisibility(View.VISIBLE);
                 }
             }
 
