@@ -22,14 +22,13 @@
             tools:context=".MainScreen" />
 
         <LinearLayout
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:layout_centerHorizontal="true"
             android:layout_margin="20dp"
-            android:layout_alignParentTop="true"
-            android:background="@color/purple_500">
+            android:layout_alignParentTop="true">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -40,13 +39,15 @@
                 android:layout_gravity="center"/>
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="8dp"
                 android:textSize="11sp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="40dp"
                 android:text="Pickup Location"
                 android:background="@color/purple_500"
-                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:id="@+id/location"/>
             <ImageView
@@ -55,6 +56,7 @@
                 android:src="@drawable/bell"
                 android:padding="8dp"
                 android:tint="@color/black"
+                android:visibility="gone"
                 android:layout_gravity="center"
                 tools:ignore="UseAppTint" />
 
