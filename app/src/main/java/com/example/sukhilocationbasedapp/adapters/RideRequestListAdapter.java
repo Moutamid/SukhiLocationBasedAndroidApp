@@ -75,7 +75,7 @@ public class RideRequestListAdapter extends RecyclerView.Adapter<RideRequestList
         holder.pickupTxt.setText(model.getPickup());
         holder.dropoffTxt.setText(model.getDropoff());
         holder.priceTxt.setText(model.getPrice());
-        holder.distanceTxt.setText(model.getTime());
+        holder.distanceTxt.setText(model.getDistance() + " km");
 
     }
 

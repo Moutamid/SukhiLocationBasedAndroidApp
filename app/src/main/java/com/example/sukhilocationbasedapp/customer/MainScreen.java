@@ -258,6 +258,19 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
         }
         mMap.setMyLocationEnabled(true);
 
+        if (currentLat !=0 && currentLng != 0){
+            LatLng latLng = new LatLng(currentLat, currentLng);
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            markerOptions.title("Current Location");
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map));
+            mMap.addMarker(markerOptions);
+
+            //move map camera
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+        }
+
         if (desLat != 0 && desLng != 0) {
             LatLng latLng = new LatLng(desLat, desLng);
             MarkerOptions markerOptions = new MarkerOptions();
@@ -310,7 +323,7 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
         currentLat = location.getLatitude();
         currentLng = location.getLongitude();
 
-        LatLng latLng = new LatLng(currentLat, currentLng);
+    /*    LatLng latLng = new LatLng(currentLat, currentLng);
         place1 = new MarkerOptions();
         place1.position(latLng);
 
@@ -319,7 +332,7 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
 
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(12));*/
         if (driverLat != 0 && driverLng != 0){
             new FetchURL(MainScreen.this).execute(getUrl(currentLat,currentLng,driverLat,driverLng, "driving"), "driving");
             checkRideStatus();
