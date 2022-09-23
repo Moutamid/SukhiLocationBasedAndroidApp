@@ -18,13 +18,17 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sukhilocationbasedapp.Model.Trip;
+import com.example.sukhilocationbasedapp.Model.User;
 import com.example.sukhilocationbasedapp.R;
 import com.example.sukhilocationbasedapp.databinding.ActivityMainScreensBinding;
 import com.example.sukhilocationbasedapp.directionhelpers.FetchURL;
@@ -46,12 +50,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 public class MainScreen extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, TaskLoadedCallback {
@@ -64,7 +72,7 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
     private FirebaseAuth mAuth;
     private String uId;
     private ImageView menuImg;
-    private CardView info_card;
+    private RelativeLayout info_card;
     private TextView pickupTxt;
     double currentLat, currentLng = 0;
     private static final int REQUEST_LOCATION = 1;
@@ -73,9 +81,10 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
     private String destination = "";
     private String pickup = "";
     private Polyline currentPolyline;
-    private MarkerOptions place1, place2;
+    private ImageView callImg,whatsappImg,googleMapImg;
     private AppCompatButton endBtn;
     private String key = "";
+    private String phone = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +98,12 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         menuImg = (ImageView) findViewById(R.id.menu);
-        info_card = (CardView) findViewById(R.id.pickup_layout);
+        info_card = (RelativeLayout) findViewById(R.id.pickup_layout);
         pickupTxt = (TextView) findViewById(R.id.pickup);
         endBtn = (AppCompatButton) findViewById(R.id.end);
+        googleMapImg = findViewById(R.id.google_map);
+        whatsappImg = findViewById(R.id.chat);
+        callImg = findViewById(R.id.call);
         mAuth = FirebaseAuth.getInstance();
         uId = mAuth.getCurrentUser().getUid();
         driversOnlineDB = FirebaseDatabase.getInstance().getReference().child("Drivers Available");
@@ -99,10 +111,14 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
         checkInternetAndGPSConnection();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             bulidGoogleApiClient();
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.CALL_PHONE}, REQUEST_LOCATION);
             showGPSDialogBox();
         }
 
@@ -115,6 +131,37 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
             custLat = getIntent().getDoubleExtra("cust_lat", 0);
             custLng = getIntent().getDoubleExtra("cust_lng", 0);
         }
+
+        googleMapImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              //  String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f", custLat,custLng);
+                String uri = "http://maps.google.com/maps?f=d&hl=en&saddr="+currentLat+","+currentLng+"&daddr="+custLat+","+custLng;
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                Intent chooser = Intent.createChooser(intent,"Launch Map");
+                startActivity(chooser);
+            }
+        });
+
+        callImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+
+                intent.setData(Uri.parse("tel:" + phone));
+                startActivity(intent);
+            }
+        });
+
+        whatsappImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://api.whatsapp.com/send?phone="+phone;
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
 
         menuImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,8 +309,47 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
             mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
             info_card.setVisibility(View.VISIBLE);
             pickupTxt.setText(pickup);
+
+            getCustomerInfo();
         }
     }
+
+    private void getCustomerInfo() {
+        mRequestTrip.child(key).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    Trip model = snapshot.getValue(Trip.class);
+                    DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Users")
+                            .child(model.getUserId());
+                    db.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()){
+                                User users = snapshot.getValue(User.class);
+                                if (users.getPhone().equals("")){
+                                    Toast.makeText(MainScreen.this, "Phone Number not exists", Toast.LENGTH_SHORT).show();
+                                }else {
+                                    phone = users.getPhone();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     protected synchronized void bulidGoogleApiClient() {
         client = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)

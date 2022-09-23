@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.sukhilocationbasedapp.AccountLoginScreen;
 import com.example.sukhilocationbasedapp.EditProfile;
 import com.example.sukhilocationbasedapp.Model.User;
+import com.example.sukhilocationbasedapp.ModuleScreen;
 import com.example.sukhilocationbasedapp.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -147,7 +148,7 @@ public class MenuItemsActivity extends AppCompatActivity {
                     }
                 });
                 mGoogleSignInClient.disconnect();
-                startActivity(new Intent(MenuItemsActivity.this, AccountLoginScreen.class));
+                startActivity(new Intent(MenuItemsActivity.this, ModuleScreen.class));
                 finish();
             }
         });

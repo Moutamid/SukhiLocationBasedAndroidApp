@@ -19,6 +19,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
@@ -26,6 +27,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.sukhilocationbasedapp.Model.Rider;
 import com.example.sukhilocationbasedapp.Model.Trip;
 import com.example.sukhilocationbasedapp.Model.User;
 import com.example.sukhilocationbasedapp.R;
@@ -85,7 +88,7 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
     private TextView top_location, bottom_location;
     private GoogleApiClient client;
     private LocationRequest locationRequest;
-    private DatabaseReference db,customerOnlineDB;
+    private DatabaseReference db,customerOnlineDB,mRequestTrip;
     private FirebaseAuth mAuth;
     private String uId;
     private double currentLat, currentLng = 0;
@@ -98,7 +101,10 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
     private AppCompatButton nextBtn;
     private static final int REQUEST_LOCATION = 1;
     private Polyline currentPolyline;
+    private ImageView callImg,whatsappImg;
+    private LinearLayout call_layout;
     private MarkerOptions place1, place2;
+    private String phone = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,10 +122,14 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
         top_location = findViewById(R.id.location);
         bottom_location = findViewById(R.id.select_location);
         nextBtn = findViewById(R.id.next);
+        call_layout = findViewById(R.id.linear);
+        whatsappImg = findViewById(R.id.chat);
+        callImg = findViewById(R.id.call);
         mAuth = FirebaseAuth.getInstance();
         uId = mAuth.getCurrentUser().getUid();
         db = FirebaseDatabase.getInstance().getReference().child("Users").child(uId);
         customerOnlineDB = FirebaseDatabase.getInstance().getReference().child("Customers Available");
+        mRequestTrip = FirebaseDatabase.getInstance().getReference().child("Requests");
         menuImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,14 +139,19 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
 
         checkInternetAndGPSConnection();
 
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             bulidGoogleApiClient();
             //   mMap.setMyLocationEnabled(true);
         } else {
 
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.CALL_PHONE}, REQUEST_LOCATION);
             showGPSDialogBox();
         }
         checkLocation();
@@ -151,6 +166,26 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
             driverLat = getIntent().getDoubleExtra("driver_lat", 0);
             driverLng = getIntent().getDoubleExtra("driver_lng", 0);
         }
+
+        callImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+
+                intent.setData(Uri.parse("tel:" + phone));
+                startActivity(intent);
+            }
+        });
+
+        whatsappImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://api.whatsapp.com/send?phone="+phone;
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
 
        // Toast.makeText(MainScreen.this, desLat +" , "+ desLng + " , "+ driverLat + " , "+ driverLng, Toast.LENGTH_SHORT).show();
 
@@ -297,8 +332,47 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
             nextBtn.setVisibility(View.GONE);
+            call_layout.setVisibility(View.VISIBLE);
+            getRiderInfo();
         }
     }
+
+    private void getRiderInfo() {
+        mRequestTrip.child(key).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    Trip model = snapshot.getValue(Trip.class);
+                    DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Drivers")
+                            .child(model.getRiderId());
+                    db.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()){
+                                Rider users = snapshot.getValue(Rider.class);
+                                if (users.getPhone().equals("")){
+                                    Toast.makeText(MainScreen.this, "Phone Number not exists", Toast.LENGTH_SHORT).show();
+                                }else {
+                                    phone = users.getPhone();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     protected synchronized void bulidGoogleApiClient() {
         client = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
