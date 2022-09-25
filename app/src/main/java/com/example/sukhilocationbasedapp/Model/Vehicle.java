@@ -8,13 +8,15 @@ public class Vehicle {
     private String model;
     private String year;
     private String license;
+    private String disability;
     private String color;
 
     public Vehicle(){
 
     }
 
-    public Vehicle(String id, String riderId, String brand, String model, String year, String license, String color) {
+    public Vehicle(String id, String riderId, String brand, String model, String year, String license,
+                   String color,String disability) {
         this.id = id;
         this.riderId = riderId;
         this.brand = brand;
@@ -22,6 +24,15 @@ public class Vehicle {
         this.year = year;
         this.license = license;
         this.color = color;
+        this.disability = disability;
+    }
+
+    public String getDisability() {
+        return disability;
+    }
+
+    public void setDisability(String disability) {
+        this.disability = disability;
     }
 
     public String getId() {

@@ -144,8 +144,7 @@ public class AccountLoginScreen extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
                     if (utype.equals("user")){
-                        User user = new User(firebaseUser.getUid(),"",account.getDisplayName(),account.getEmail(),
-                                "","",account.getPhotoUrl().toString());
+                        User user = new User(firebaseUser.getUid(),account.getDisplayName(),account.getEmail(),"" ,"",account.getPhotoUrl().toString());
                         userdb.child(firebaseUser.getUid()).setValue(user);
                         sendUserToMainScreen();
                     }else {

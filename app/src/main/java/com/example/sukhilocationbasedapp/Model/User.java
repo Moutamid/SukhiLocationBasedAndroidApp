@@ -27,7 +27,6 @@ public class User {
 
     public User(String id, String fullname, String email, String phone,String location, String imageUrl) {
         this.id = id;
-
         this.fullname = fullname;
         this.email = email;
         this.phone = phone;

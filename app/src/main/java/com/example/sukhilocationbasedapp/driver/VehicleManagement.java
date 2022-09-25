@@ -9,8 +9,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.example.sukhilocationbasedapp.Model.Vehicle;
 import com.example.sukhilocationbasedapp.R;
@@ -33,6 +36,10 @@ public class VehicleManagement extends AppCompatActivity {
     private ImageView backImg;
     private String brand,model,year,license,color;
     private ProgressDialog pd;
+    private Spinner category;
+    private ArrayAdapter<String> spinnerArrayAdapter;
+    String disabilityList[] = {"Disable from arms","Backbone Problem","Mental Illness","Disable from Legs"};
+    private String disability = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +53,25 @@ public class VehicleManagement extends AppCompatActivity {
         colorTxt = findViewById(R.id.color);
         saveBtn = findViewById(R.id.saveBtn);
         backImg = findViewById(R.id.back);
+        category = findViewById(R.id.spinner);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        spinnerArrayAdapter = new ArrayAdapter<String>(VehicleManagement.this,
+                android.R.layout.simple_spinner_dropdown_item, disabilityList);
+        category.setAdapter(spinnerArrayAdapter);
+        category.setSelection(spinnerArrayAdapter.getPosition(disabilityList[0]));
+        category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
+                disability = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         db = FirebaseDatabase.getInstance().getReference().child("Vehicles");
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +99,13 @@ public class VehicleManagement extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
+                    Vehicle model = snapshot.getValue(Vehicle.class);
                     saveBtn.setVisibility(View.GONE);
+                    brandTxt.setText(model.getBrand());
+                    modelTxt.setText(model.getModel());
+                    yearTxt.setText(model.getYear());
+                    licenseTxt.setText(model.getLicense());
+                    colorTxt.setText(model.getColor());
                     brandTxt.setEnabled(false);
                     modelTxt.setEnabled(false);
                     yearTxt.setEnabled(false);
@@ -93,7 +123,7 @@ public class VehicleManagement extends AppCompatActivity {
 
     private void addVehicles() {
         String key = db.push().getKey();
-        Vehicle vehicle = new Vehicle(key,user.getUid(),brand,model,year,license,color);
+        Vehicle vehicle = new Vehicle(key,user.getUid(),brand,model,year,license,color,disability);
         db.child(user.getUid()).setValue(vehicle);
         pd.dismiss();
         Intent intent = new Intent(VehicleManagement.this, MainScreen.class);

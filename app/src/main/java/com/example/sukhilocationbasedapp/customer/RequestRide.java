@@ -85,7 +85,7 @@ public class RequestRide extends AppCompatActivity {
     private RequestQueue requestQueue;
     private String key = "";
     private double distance = 0;
-    private double estimatedDriveTimeInMinutes = 0.0;
+    private double estimatedDriverTimeInMinutes = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,12 +146,15 @@ public class RequestRide extends AppCompatActivity {
         drop_location.setText(destinationLocation);
         getCustomerLatLng();
         getLatLng(destinationLocation);
-      //  getDriverLatLng();
+        getDriverLatLng();
+      //  Toast.makeText(RequestRide.this, ""+estimatedDriverTimeInMinutes, Toast.LENGTH_SHORT).show();
         arms_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                disability = "arms";
-                time = 10;
+                disability = "Disable from arms";
+                if (estimatedDriverTimeInMinutes <= 10){
+                    time =  (int) estimatedDriverTimeInMinutes;
+                }
                 price = priceTxt1.getText().toString();
                 //int randomTime = new Random().nextInt(10);
                 //showAlertDialogBox(randomTime);
@@ -164,8 +167,10 @@ public class RequestRide extends AppCompatActivity {
         backbone_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                disability = "backbone";
-                time = 5;
+                disability = "Backbone Problem";
+                if (estimatedDriverTimeInMinutes <= 5){
+                    time =  (int) estimatedDriverTimeInMinutes;
+                }
                 price = priceTxt2.getText().toString();
                 //int randomTime = new Random().nextInt(10);
                // showAlertDialogBox(randomTime);
@@ -178,8 +183,10 @@ public class RequestRide extends AppCompatActivity {
         mental_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                disability = "mental";
-                time = 5;
+                disability = "Mental Illness";
+                if (estimatedDriverTimeInMinutes <= 5){
+                    time =  (int) estimatedDriverTimeInMinutes;
+                }
                 price = priceTxt3.getText().toString();
                 //int randomTime = new Random().nextInt(10);
                 //showAlertDialogBox(randomTime);
@@ -192,8 +199,10 @@ public class RequestRide extends AppCompatActivity {
         leg_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                disability = "legs";
-                time = 5;
+                disability = "Disable from Legs";
+                if (estimatedDriverTimeInMinutes <= 5){
+                    time =  (int) estimatedDriverTimeInMinutes;
+                }
                 price = priceTxt4.getText().toString();
                 //int randomTime = new Random().nextInt(10);
                 //showAlertDialogBox(randomTime);
@@ -305,7 +314,7 @@ public class RequestRide extends AppCompatActivity {
                 String key = mRequestTrip.push().getKey();
                 if (!cash.equals("")){
                     Trip model = new Trip(key,user.getUid(),sourceLocation,destinationLocation,price,time,
-                            "",cash,"pending", (int) distance);
+                            "",cash,"pending", (int) distance,disability);
                     mRequestTrip.child(key).setValue(model);
                     pd.setMessage("Searching For Driver......");
                     pd.show();
@@ -441,7 +450,9 @@ public class RequestRide extends AppCompatActivity {
                         double lat = (double) ds.child("l").child("0").getValue();
                         double lng = (double) ds.child("l").child("1").getValue();
 
-
+                        if (custLat != 0 && custLng != 0){
+                            calculateCustDriverDistance(custLat,custLng,lat,lng);
+                        }
                     }
                 }
             }
@@ -453,17 +464,8 @@ public class RequestRide extends AppCompatActivity {
         });
     }
 
-    private void calculateDistance(double custLat, double custLng, double lat, double lng) {
-        /*double theta = custLng - lng;
-        double dist = Math.sin(deg2rad(custLat))
-                * Math.sin(deg2rad(lat))
-                + Math.cos(deg2rad(custLat))
-                * Math.cos(deg2rad(lat))
-                * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-        distance = (int) dist;*/
+
+    private void calculateCustDriverDistance(double custLat, double custLng, double lat, double lng) {
 
         Location location = new Location("One");
         location.setLatitude(custLat);
@@ -472,20 +474,24 @@ public class RequestRide extends AppCompatActivity {
         location1.setLatitude(lat);
         location1.setLongitude(lng);
         distance = location.distanceTo(location1);
-     //   distance = distance/1000;
+        //   distance = distance/1000;
         int speedIs10MetersPerMinute = 10;
-        estimatedDriveTimeInMinutes =  distance/ speedIs10MetersPerMinute;
-     //   float estimatedTime = distance/location.getSpeed();
-       // showAlertDialogBox((int) estimatedDriveTimeInMinutes);
-//        Toast.makeText(RequestRide.this, ""+estimatedDriveTimeInMinutes, Toast.LENGTH_SHORT).show();
+        estimatedDriverTimeInMinutes =  distance/ speedIs10MetersPerMinute;
+        //   float estimatedTime = distance/location.getSpeed();
+        // showAlertDialogBox((int) estimatedDriveTimeInMinutes);
     }
-    private double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
+    private void calculateDistance(double custLat, double custLng, double lat, double lng) {
+
+        Location location = new Location("One");
+        location.setLatitude(custLat);
+        location.setLongitude(custLng);
+        Location location1 = new Location("Two");
+        location1.setLatitude(lat);
+        location1.setLongitude(lng);
+        distance = location.distanceTo(location1);
+      //  Toast.makeText(RequestRide.this,String.valueOf(distance),Toast.LENGTH_LONG).show();
     }
 
-    private double rad2deg(double rad) {
-        return (rad * 180.0 / Math.PI);
-    }
     private void getRiderLatLng(String riderId) {
         DatabaseReference driversOnlineDB = FirebaseDatabase.getInstance().getReference()
                 .child("Drivers Available").child(riderId);
@@ -552,7 +558,8 @@ public class RequestRide extends AppCompatActivity {
         });
         pickup.setText(model.getPickup());
         dropoff.setText(model.getDropoff());
-        timeTxt.setText(model.getTime());
+        distanceTxt.setText(String.valueOf(model.getDistance()));
+        timeTxt.setText(String.valueOf(model.getTime()));
         priceTxt.setText(model.getPrice());
     }
 
@@ -577,7 +584,7 @@ public class RequestRide extends AppCompatActivity {
         distance = location.distanceTo(location1);
         //   distance = distance/1000;
         int speedIs10MetersPerMinute = 10;
-        estimatedDriveTimeInMinutes =  distance/ speedIs10MetersPerMinute;
+        double estimatedDriveTimeInMinutes =  distance/ speedIs10MetersPerMinute;
         //   float estimatedTime = distance/location.getSpeed();
         showAlertDialogBox((int) estimatedDriveTimeInMinutes);
 //        Toast.makeText(RequestRide.this, ""+estimatedDriveTimeInMinutes, Toast.LENGTH_SHORT).show();

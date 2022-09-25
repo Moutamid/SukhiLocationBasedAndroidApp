@@ -15,6 +15,7 @@ public class Trip implements Parcelable{
     private String cashStatus;
     private int distance;
     private String status;
+    private String disability;
 
     public Trip(){
 
@@ -22,7 +23,7 @@ public class Trip implements Parcelable{
 
 
     public Trip(String id, String userId, String pickup, String dropoff, String price, int time,
-                String riderId, String cashStatus,String status,int distance) {
+                String riderId, String cashStatus,String status,int distance,String disability) {
         this.id = id;
         this.userId = userId;
         this.pickup = pickup;
@@ -33,6 +34,7 @@ public class Trip implements Parcelable{
         this.cashStatus = cashStatus;
         this.status = status;
         this.distance = distance;
+        this.disability = disability;
     }
 
     protected Trip(Parcel in) {
@@ -46,6 +48,7 @@ public class Trip implements Parcelable{
         cashStatus = in.readString();
         distance = in.readInt();
         status = in.readString();
+        disability = in.readString();
     }
 
     public static final Creator<Trip> CREATOR = new Creator<Trip>() {
@@ -140,6 +143,14 @@ public class Trip implements Parcelable{
         this.time = time;
     }
 
+    public String getDisability() {
+        return disability;
+    }
+
+    public void setDisability(String disability) {
+        this.disability = disability;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -157,5 +168,6 @@ public class Trip implements Parcelable{
         parcel.writeString(cashStatus);
         parcel.writeInt(distance);
         parcel.writeString(status);
+        parcel.writeString(disability);
     }
 }

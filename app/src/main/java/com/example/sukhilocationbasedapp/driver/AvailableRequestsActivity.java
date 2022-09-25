@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.sukhilocationbasedapp.Model.Trip;
+import com.example.sukhilocationbasedapp.Model.Vehicle;
 import com.example.sukhilocationbasedapp.R;
 import com.example.sukhilocationbasedapp.adapters.RideRequestListAdapter;
 import com.example.sukhilocationbasedapp.listener.ItemClickListener;
@@ -26,6 +27,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -36,7 +39,7 @@ public class AvailableRequestsActivity extends AppCompatActivity {
     private LinearLayoutManager manager;
     private ImageView menuImg;
     private LinearLayout dataLayout,noDataLayout;
-    private DatabaseReference mRequestTrip;
+    private DatabaseReference mRequestTrip,db;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private List<Trip> tripList;
@@ -55,6 +58,7 @@ public class AvailableRequestsActivity extends AppCompatActivity {
         noDataLayout = findViewById(R.id.no_data_layout);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        db = FirebaseDatabase.getInstance().getReference().child("Vehicles");
         mRequestTrip = FirebaseDatabase.getInstance().getReference().child("Requests");
         tripList = new ArrayList<>();
         menuImg.setOnClickListener(new View.OnClickListener() {
@@ -64,12 +68,29 @@ public class AvailableRequestsActivity extends AppCompatActivity {
             }
         });
 
-        getRequestList();
+        getDisability();
     }
 
-    private void getRequestList() {
+    private void getDisability() {
+        db.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    Vehicle model = snapshot.getValue(Vehicle.class);
+                    String disability = model.getDisability();
+                    getRequestList(disability);
+                }
+            }
 
-        Query query = mRequestTrip.orderByChild("status").equalTo("pending");
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void getRequestList(String disability) {
+        Query query = mRequestTrip.orderByChild("disability").equalTo(disability);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -77,12 +98,20 @@ public class AvailableRequestsActivity extends AppCompatActivity {
                     tripList.clear();
                     for (DataSnapshot ds : snapshot.getChildren()){
                         Trip model = ds.getValue(Trip.class);
-                        tripList.add(model);
+                        if (model.getStatus().equals("pending")) {
+                            notifyTxt.setText("You have " + snapshot.getChildrenCount() + " new requests.");
+                            tripList.add(model);
+                        }
                     }
+                    Collections.sort(tripList, new Comparator<Trip>() {
+                        @Override
+                        public int compare(Trip trip, Trip t1) {
+                            return Long.compare(trip.getTime(),t1.getTime());
+                        }
+                    });
                     noDataLayout.setVisibility(View.GONE);
                     dataLayout.setVisibility(View.VISIBLE);
                     notifyTxt.setVisibility(View.VISIBLE);
-                    notifyTxt.setText("You have " + snapshot.getChildrenCount() + " new requests.");
                     RideRequestListAdapter adapter = new RideRequestListAdapter(AvailableRequestsActivity.this,
                             tripList);
                     recyclerView.setAdapter(adapter);
