@@ -63,6 +63,7 @@ public class MyTrips extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
+                    tripList.clear();
                     for (DataSnapshot ds : snapshot.getChildren()){
                         Trip model = ds.getValue(Trip.class);
                         if (model.getUserId().equals(user.getUid())) {

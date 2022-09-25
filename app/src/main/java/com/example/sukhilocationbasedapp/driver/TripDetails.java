@@ -95,7 +95,7 @@ public class TripDetails extends AppCompatActivity {
         });
         pickupTxt.setText(model.getPickup());
         dropoffTxt.setText(model.getDropoff());
-        timeTxt.setText(model.getTime());
+        timeTxt.setText(model.getTime() + " mins");
         priceTxt.setText(model.getPrice());
         getCustomerLatLng(model.getUserId());
         getLatLng(model.getDropoff());

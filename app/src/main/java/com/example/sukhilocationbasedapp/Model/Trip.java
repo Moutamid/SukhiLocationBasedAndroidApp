@@ -10,7 +10,7 @@ public class Trip implements Parcelable{
     private String pickup;
     private String dropoff;
     private String price;
-    private String time;
+    private int time;
     private String riderId;
     private String cashStatus;
     private int distance;
@@ -21,7 +21,7 @@ public class Trip implements Parcelable{
     }
 
 
-    public Trip(String id, String userId, String pickup, String dropoff, String price, String time,
+    public Trip(String id, String userId, String pickup, String dropoff, String price, int time,
                 String riderId, String cashStatus,String status,int distance) {
         this.id = id;
         this.userId = userId;
@@ -41,7 +41,7 @@ public class Trip implements Parcelable{
         pickup = in.readString();
         dropoff = in.readString();
         price = in.readString();
-        time = in.readString();
+        time = in.readInt();
         riderId = in.readString();
         cashStatus = in.readString();
         distance = in.readInt();
@@ -132,11 +132,11 @@ public class Trip implements Parcelable{
         this.price = price;
     }
 
-    public String getTime() {
+    public int getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(int time) {
         this.time = time;
     }
 
@@ -152,7 +152,7 @@ public class Trip implements Parcelable{
         parcel.writeString(pickup);
         parcel.writeString(dropoff);
         parcel.writeString(price);
-        parcel.writeString(time);
+        parcel.writeInt(time);
         parcel.writeString(riderId);
         parcel.writeString(cashStatus);
         parcel.writeInt(distance);

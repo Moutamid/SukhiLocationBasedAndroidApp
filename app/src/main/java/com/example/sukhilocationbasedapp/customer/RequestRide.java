@@ -73,7 +73,7 @@ public class RequestRide extends AppCompatActivity {
     private FirebaseUser user;
     private String disability = "";
     private String price = "";
-    private String time = "";
+    private int time = 0;
     private String cash = "";
     private ProgressDialog pd;
     private double driverLat = 0;
@@ -151,7 +151,7 @@ public class RequestRide extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 disability = "arms";
-                time = timeTxt1.getText().toString();
+                time = 10;
                 price = priceTxt1.getText().toString();
                 //int randomTime = new Random().nextInt(10);
                 //showAlertDialogBox(randomTime);
@@ -165,7 +165,7 @@ public class RequestRide extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 disability = "backbone";
-                time = timeTxt2.getText().toString();
+                time = 5;
                 price = priceTxt2.getText().toString();
                 //int randomTime = new Random().nextInt(10);
                // showAlertDialogBox(randomTime);
@@ -179,7 +179,7 @@ public class RequestRide extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 disability = "mental";
-                time = timeTxt3.getText().toString();
+                time = 5;
                 price = priceTxt3.getText().toString();
                 //int randomTime = new Random().nextInt(10);
                 //showAlertDialogBox(randomTime);
@@ -193,7 +193,7 @@ public class RequestRide extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 disability = "legs";
-                time = timeTxt4.getText().toString();
+                time = 5;
                 price = priceTxt4.getText().toString();
                 //int randomTime = new Random().nextInt(10);
                 //showAlertDialogBox(randomTime);
@@ -309,7 +309,7 @@ public class RequestRide extends AppCompatActivity {
                     mRequestTrip.child(key).setValue(model);
                     pd.setMessage("Searching For Driver......");
                     pd.show();
-                    searchingForDriver();
+                    searchingForDriver(key);
                 }
             }
         });
@@ -371,14 +371,15 @@ public class RequestRide extends AppCompatActivity {
     }
 
 
-    private void searchingForDriver() {
-        Query query = mRequestTrip.orderByChild("status").equalTo("accepted");
-        query.addValueEventListener(new ValueEventListener() {
+    private void searchingForDriver(String childKey) {
+        //Toast.makeText(this, ""+ childKey, Toast.LENGTH_SHORT).show();
+        //Query query = mRequestTrip.child(childKey).orderByChild("status").equalTo("accepted");
+        mRequestTrip.child(childKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
-                    for (DataSnapshot ds : snapshot.getChildren()){
-                        Trip model = ds.getValue(Trip.class);
+                 //   for (DataSnapshot ds : snapshot.getChildren()){
+                        Trip model = snapshot.getValue(Trip.class);
                         if(!model.getRiderId().equals("")){
                             key = model.getId();
                             getRiderLatLng(model.getRiderId());
@@ -400,7 +401,7 @@ public class RequestRide extends AppCompatActivity {
 
                         }
                     }
-                }
+                //}
             }
 
             @Override

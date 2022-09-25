@@ -65,10 +65,11 @@ public class RideReviewsActivity extends AppCompatActivity {
 
     private void getReviewsList() {
         Query query = mReviewsDB.orderByChild("riderId").equalTo(user.getUid());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
+                    reviewsList.clear();
                     for (DataSnapshot ds : snapshot.getChildren()){
                         Reviews model = ds.getValue(Reviews.class);
                         reviewsList.add(model);
