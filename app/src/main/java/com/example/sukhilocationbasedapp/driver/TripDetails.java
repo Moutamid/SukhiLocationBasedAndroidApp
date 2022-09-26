@@ -116,6 +116,7 @@ public class TripDetails extends AppCompatActivity {
                 mRequestTrip.child(model.getId()).updateChildren(hashMap);
 
                 Intent intent = new Intent(TripDetails.this,MainScreen.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("key",model.getId());
                 intent.putExtra("pickup",model.getPickup());
                 intent.putExtra("destination",model.getDropoff());
@@ -124,6 +125,7 @@ public class TripDetails extends AppCompatActivity {
                 intent.putExtra("cust_lat",custLat);
                 intent.putExtra("cust_lng",custLng);
                 startActivity(intent);
+                finish();
             }
         });
 

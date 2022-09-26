@@ -161,7 +161,7 @@ public class VerficationCode extends AppCompatActivity {
             // When the task is over it will print 00:00:00 there
             public void onFinish() {
                 mTvTime.setText("0:30");
-                mTvResend.setEnabled(true);
+             //   mTvResend.setEnabled(true);
                 //timer.cancel();
                 //disableButton();
             }

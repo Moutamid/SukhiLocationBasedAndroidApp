@@ -26,13 +26,13 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RideRequestListAdapter extends RecyclerView.Adapter<RideRequestListAdapter.RideRequestViewHolder>{
+public class NotificationsListAdapter extends RecyclerView.Adapter<NotificationsListAdapter.RideRequestViewHolder>{
 
     private Context mContext;
     private List<Trip> tripList;
     private ItemClickListener itemClickListener;
 
-    public RideRequestListAdapter(Context mContext, List<Trip> tripList) {
+    public NotificationsListAdapter(Context mContext, List<Trip> tripList) {
         this.mContext = mContext;
         this.tripList = tripList;
     }
@@ -80,7 +80,7 @@ public class RideRequestListAdapter extends RecyclerView.Adapter<RideRequestList
         holder.distanceTxt.setText(model.getDistance() + " km\n" + model.getTime() + " mins");
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Vehicles").
-                child(mAuth.getCurrentUser().getUid());
+                child(model.getRiderId());
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 
 public class VehicleManagement extends AppCompatActivity {
 
@@ -100,17 +102,16 @@ public class VehicleManagement extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
                     Vehicle model = snapshot.getValue(Vehicle.class);
-                    saveBtn.setVisibility(View.GONE);
                     brandTxt.setText(model.getBrand());
                     modelTxt.setText(model.getModel());
                     yearTxt.setText(model.getYear());
                     licenseTxt.setText(model.getLicense());
                     colorTxt.setText(model.getColor());
-                    brandTxt.setEnabled(false);
-                    modelTxt.setEnabled(false);
-                    yearTxt.setEnabled(false);
-                    licenseTxt.setEnabled(false);
-                    colorTxt.setEnabled(false);
+                    for(int i = 0; i < disabilityList.length; i++){
+                        if (disabilityList[i].equals(model.getDisability())){
+                            category.setSelection(spinnerArrayAdapter.getPosition(disabilityList[i]));
+                        }
+                    }
                 }
             }
 
@@ -123,8 +124,18 @@ public class VehicleManagement extends AppCompatActivity {
 
     private void addVehicles() {
         String key = db.push().getKey();
-        Vehicle vehicle = new Vehicle(key,user.getUid(),brand,model,year,license,color,disability);
-        db.child(user.getUid()).setValue(vehicle);
+        HashMap<String,Object> hashMap = new HashMap<>();
+        hashMap.put("id",key);
+        hashMap.put("riderId",user.getUid());
+        hashMap.put("brand",brand);
+        hashMap.put("model",model);
+        hashMap.put("year",year);
+        hashMap.put("license",license);
+        hashMap.put("color",color);
+        hashMap.put("disability",disability);
+
+       // Vehicle vehicle = new Vehicle(key,user.getUid(),brand,model,year,license,color,disability);
+        db.child(user.getUid()).updateChildren(hashMap);
         pd.dismiss();
         Intent intent = new Intent(VehicleManagement.this, MainScreen.class);
         //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -168,4 +179,6 @@ public class VehicleManagement extends AppCompatActivity {
         }
         return true;
     }
+
+
 }

@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.example.sukhilocationbasedapp.Model.Trip;
 import com.example.sukhilocationbasedapp.R;
+import com.example.sukhilocationbasedapp.adapters.NotificationsListAdapter;
 import com.example.sukhilocationbasedapp.adapters.RideRequestListAdapter;
 import com.example.sukhilocationbasedapp.databinding.ActivityMyTripsBinding;
 import com.example.sukhilocationbasedapp.driver.TripDetails;
@@ -80,7 +81,7 @@ public class MyTrips extends AppCompatActivity {
                     });
                     b.recyclerView.setVisibility(View.VISIBLE);
                     b.noDataLayout.setVisibility(View.GONE);
-                    RideRequestListAdapter adapter = new RideRequestListAdapter(MyTrips.this,
+                    NotificationsListAdapter adapter = new NotificationsListAdapter(MyTrips.this,
                             tripList);
                     b.recyclerView.setAdapter(adapter);
                     adapter.setItemClickListener(new ItemClickListener() {

@@ -67,10 +67,8 @@ public class AvailableRequestsActivity extends AppCompatActivity {
                 startActivity(new Intent(AvailableRequestsActivity.this,RiderMenuItemActivity.class));
             }
         });
-
         getDisability();
     }
-
     private void getDisability() {
         db.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -79,6 +77,7 @@ public class AvailableRequestsActivity extends AppCompatActivity {
                     Vehicle model = snapshot.getValue(Vehicle.class);
                     String disability = model.getDisability();
                     getRequestList(disability);
+                    getRequestCount(disability);
                 }
             }
 
@@ -88,6 +87,31 @@ public class AvailableRequestsActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+    private void getRequestCount(String text) {
+        Query query = mRequestTrip.orderByChild("status").equalTo("pending");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for (DataSnapshot ds: snapshot.getChildren()){
+                        Trip model = ds.getValue(Trip.class);
+                        if (model.getDisability().equals(text)){
+                            notifyTxt.setText("You have " + snapshot.getChildrenCount() + " new requests.");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 
     private void getRequestList(String disability) {
         Query query = mRequestTrip.orderByChild("disability").equalTo(disability);
@@ -99,7 +123,6 @@ public class AvailableRequestsActivity extends AppCompatActivity {
                     for (DataSnapshot ds : snapshot.getChildren()){
                         Trip model = ds.getValue(Trip.class);
                         if (model.getStatus().equals("pending")) {
-                            notifyTxt.setText("You have " + snapshot.getChildrenCount() + " new requests.");
                             tripList.add(model);
                         }
                     }

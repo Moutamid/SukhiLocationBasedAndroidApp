@@ -99,6 +99,7 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
     private String source = "";
     private String key = "";
     private AppCompatButton nextBtn;
+    private boolean complete = false;
     private static final int REQUEST_LOCATION = 1;
     private Polyline currentPolyline;
     private ImageView callImg,whatsappImg;
@@ -165,7 +166,9 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
             desLng = getIntent().getDoubleExtra("lng", 0);
             driverLat = getIntent().getDoubleExtra("driver_lat", 0);
             driverLng = getIntent().getDoubleExtra("driver_lng", 0);
+
         }
+
 
         callImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,7 +214,6 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
                 startActivity(intent);
             }
         });
-
     }
 
     private void showGPSDialogBox() {
@@ -397,20 +399,22 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
         currentLat = location.getLatitude();
         currentLng = location.getLongitude();
 
-    /*    LatLng latLng = new LatLng(currentLat, currentLng);
-        place1 = new MarkerOptions();
-        place1.position(latLng);
 
-        place1.icon(BitmapDescriptorFactory.fromResource(R.drawable.map));
-        mMap.addMarker(place1);
+        LatLng latLng = new LatLng(currentLat, currentLng);
 
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(12));*/
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+
         if (driverLat != 0 && driverLng != 0){
-            new FetchURL(MainScreen.this).execute(getUrl(currentLat,currentLng,driverLat,driverLng, "driving"), "driving");
-            checkRideStatus();
+            new FetchURL(MainScreen.this).execute(getUrl(currentLat,currentLng,driverLat,driverLng,
+                    "driving"), "driving");
+            if (!complete) {
+                checkRideStatus();
+            }
         }
+
+     //   Toast.makeText(this, ""  +driverLat, Toast.LENGTH_SHORT).show();
 
         GeoFire geoFire =  new GeoFire(customerOnlineDB);
         geoFire.setLocation(uId,new GeoLocation(location.getLatitude(),location.getLongitude()));
@@ -420,13 +424,14 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
     private void checkRideStatus() {
         DatabaseReference mRequestTrip = FirebaseDatabase.getInstance().getReference().child("Requests")
                 .child(key);
-        mRequestTrip.addValueEventListener(new ValueEventListener() {
+        mRequestTrip.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
                     Trip model = snapshot.getValue(Trip.class);
                     if (model.getStatus().equals("completed")) {
                         Intent intent = new Intent(MainScreen.this, RateTrip.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         intent.putExtra("trip", model);
                         startActivity(intent);
                         finish();
@@ -435,6 +440,7 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
                         driverLat = 0;
                         driverLng = 0;
                         mMap.clear();
+                        complete = true;
                     }
                 }
             }
@@ -446,6 +452,8 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
         });
 
     }
+
+
 
   /*  private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
         String strAdd = "";
@@ -567,5 +575,11 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
             currentPolyline.remove();
         currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

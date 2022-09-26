@@ -26,34 +26,43 @@
         tools:targetApi="31">
         <activity
             android:name=".driver.PrivacyPolicyScreen"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".driver.RiderMenuItemActivity"/>
         <activity
             android:name=".driver.LanguagesActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".driver.RiderMenuItemActivity"/>
         <activity
             android:name=".driver.DocumentManagementActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".driver.RiderMenuItemActivity"/>
         <activity
             android:name=".customer.MyTrips"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".customer.MenuItemsActivity"/>
         <activity
             android:name=".EditProfile"
             android:exported="false" />
         <activity
             android:name=".customer.HelpActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".customer.MenuItemsActivity"/>
         <activity
             android:name=".customer.PaymentActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".customer.MenuItemsActivity"/>
         <activity
             android:name=".customer.SettingsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".customer.MenuItemsActivity"/>
         <activity
             android:name=".customer.NotificationActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".customer.MenuItemsActivity"/>
         <activity
             android:name=".customer.PromosScreen"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".customer.MenuItemsActivity"/>
         <activity
             android:name=".ModuleScreen"
             android:exported="false" />
@@ -72,13 +81,16 @@
             android:label="@string/title_activity_main_screen" />
         <activity
             android:name=".driver.RideReviewsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".driver.MainScreen"/>
         <activity
             android:name=".driver.RiderMenuItemActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".driver.MainScreen"/>
         <activity
             android:name=".driver.TripDetails"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".driver.AvailableRequestsActivity"/>
         <activity
             android:name=".driver.VehicleManagement"
             android:exported="false" />
@@ -109,10 +121,11 @@
             android:exported="false" />
         <activity
             android:name=".customer.RequestRide"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".customer.MainScreen"/>
         <activity
             android:name=".customer.RateTrip"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".customer.SetYourLocation"
             android:exported="false" />

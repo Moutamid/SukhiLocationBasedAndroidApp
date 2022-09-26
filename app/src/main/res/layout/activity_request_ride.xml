@@ -713,43 +713,54 @@
                         android:background="@drawable/dividers"
                         android:paddingBottom="8dp">
 
-                        <TextView
-                            android:id="@+id/es_time"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:drawableLeft="@drawable/distance"
-                            android:drawablePadding="8dp"
-                            android:text="Eastimated Time"
-                            android:textSize="14sp" />
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:layout_marginLeft="20dp">
+                            <TextView
+                                android:id="@+id/es_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/distance"
+                                android:drawablePadding="8dp"
+                                android:text="Estimated Time"
+                                android:textSize="14sp" />
 
-                        <TextView
-                            android:id="@+id/estimated_time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/es_time"
-                            android:layout_marginLeft="50dp"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp" />
+                            <TextView
+                                android:id="@+id/estimated_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/es_time"
+                                android:layout_gravity="center"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp" />
 
-                        <TextView
-                            android:id="@+id/es_dist"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="50dp"
-                            android:text="Eastimated Distance"
-                            android:textSize="14sp" />
+                        </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/estimated_distance"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/es_dist"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="80dp"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp" />
+                            android:orientation="vertical"
+                            android:layout_marginRight="20dp"
+                            android:layout_alignParentRight="true">
+                            <TextView
+                                android:id="@+id/es_dist"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Estimated Distance"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/estimated_distance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:textColor="@android:color/black"
+                                android:textSize="18sp" />
+
+                        </LinearLayout>
 
                     </RelativeLayout>
 

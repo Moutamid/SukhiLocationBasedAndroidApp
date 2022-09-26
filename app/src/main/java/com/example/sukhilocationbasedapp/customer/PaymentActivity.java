@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.example.sukhilocationbasedapp.Model.Trip;
 import com.example.sukhilocationbasedapp.R;
+import com.example.sukhilocationbasedapp.adapters.NotificationsListAdapter;
 import com.example.sukhilocationbasedapp.adapters.RideRequestListAdapter;
 import com.example.sukhilocationbasedapp.databinding.ActivityPaymentBinding;
 import com.example.sukhilocationbasedapp.driver.TripDetails;
@@ -71,15 +72,9 @@ public class PaymentActivity extends AppCompatActivity {
                             tripList.add(model);
                         }
                     }
-                    Collections.sort(tripList, new Comparator<Trip>() {
-                        @Override
-                        public int compare(Trip trip, Trip t1) {
-                            return Long.compare(trip.getTime(),t1.getTime());
-                        }
-                    });
                     b.recyclerView.setVisibility(View.VISIBLE);
                     b.noDataLayout.setVisibility(View.GONE);
-                    RideRequestListAdapter adapter = new RideRequestListAdapter(PaymentActivity.this,
+                    NotificationsListAdapter adapter = new NotificationsListAdapter(PaymentActivity.this,
                             tripList);
                     b.recyclerView.setAdapter(adapter);
                     adapter.setItemClickListener(new ItemClickListener() {

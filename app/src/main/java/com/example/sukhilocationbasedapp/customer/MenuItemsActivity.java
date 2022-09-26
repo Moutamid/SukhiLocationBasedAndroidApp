@@ -15,6 +15,7 @@ import com.example.sukhilocationbasedapp.EditProfile;
 import com.example.sukhilocationbasedapp.Model.User;
 import com.example.sukhilocationbasedapp.ModuleScreen;
 import com.example.sukhilocationbasedapp.R;
+import com.example.sukhilocationbasedapp.driver.RiderMenuItemActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -122,6 +123,7 @@ public class MenuItemsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MenuItemsActivity.this,MainScreen.class);
                 startActivity(intent);
+                finish();
             }
         });
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
@@ -148,7 +150,9 @@ public class MenuItemsActivity extends AppCompatActivity {
                     }
                 });
                 mGoogleSignInClient.disconnect();
-                startActivity(new Intent(MenuItemsActivity.this, ModuleScreen.class));
+                Intent intent = new Intent(MenuItemsActivity.this, ModuleScreen.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 finish();
             }
         });

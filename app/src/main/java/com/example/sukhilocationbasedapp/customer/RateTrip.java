@@ -17,7 +17,11 @@ import com.example.sukhilocationbasedapp.Model.Reviews;
 import com.example.sukhilocationbasedapp.Model.Rider;
 import com.example.sukhilocationbasedapp.Model.Trip;
 import com.example.sukhilocationbasedapp.Model.Vehicle;
+import com.example.sukhilocationbasedapp.ModuleScreen;
 import com.example.sukhilocationbasedapp.R;
+import com.example.sukhilocationbasedapp.VerficationCode;
+import com.example.sukhilocationbasedapp.driver.RideReviewsActivity;
+import com.example.sukhilocationbasedapp.driver.RiderMenuItemActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -124,6 +128,16 @@ public class RateTrip extends AppCompatActivity {
         db.child(key).setValue(reviews);
 
         Toast.makeText(RateTrip.this, "Thanks for your feedback...", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(RateTrip.this, MainScreen.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
         startActivity(new Intent(RateTrip.this,MainScreen.class));
         finish();
     }

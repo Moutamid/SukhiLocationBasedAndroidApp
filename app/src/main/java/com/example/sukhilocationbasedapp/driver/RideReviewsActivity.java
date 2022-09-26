@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.sukhilocationbasedapp.Model.Reviews;
+import com.example.sukhilocationbasedapp.ModuleScreen;
 import com.example.sukhilocationbasedapp.R;
 import com.example.sukhilocationbasedapp.adapters.ReviewListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -91,5 +92,11 @@ public class RideReviewsActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

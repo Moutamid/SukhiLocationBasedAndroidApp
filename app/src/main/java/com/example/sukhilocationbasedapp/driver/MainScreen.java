@@ -396,6 +396,13 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
         currentLat = location.getLatitude();
         currentLng = location.getLongitude();
 
+
+        LatLng latLng = new LatLng(currentLat, currentLng);
+
+        //move map camera
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+
         if (custLat != 0 && custLng != 0){
             new FetchURL(MainScreen.this).execute(getUrl(currentLat,currentLng,custLat,custLng, "driving"), "driving");
         }
@@ -455,5 +462,11 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback, 
         if (currentPolyline != null)
             currentPolyline.remove();
         currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
